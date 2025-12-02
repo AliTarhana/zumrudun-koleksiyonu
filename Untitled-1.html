@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Değerli Taş Koleksiyonu</title>
+<style>
+/* --------- Temel / Layout --------- */
+:root{
+  --accent1:#9b59b6;
+  --accent2:#3498db;
+  --bg:#f8f5f2;
+  --card:#ffffff;
+  --muted:#7f8c8d;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(to bottom,var(--bg),#f0ece5);
+  color:#222;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:20px;
+}
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  background:var(--card);
+  border-radius:14px;
+  padding:24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* header */
+.header{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+.title {
+  display:flex;
+  flex-direction:column;
+}
+.title h1{
+  margin:0;
+  font-size:1.8rem;
+  color:#4a2c6d;
+}
+.title span{color:var(--muted);font-size:0.95rem}
+.controls{display:flex;gap:8px;align-items:center}
+.btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:0 3px 8px rgba(0,0,0,0.08);
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(to right,var(--accent1),var(--accent2)); color:white}
+.btn-ghost{background:transparent;border:1px solid #eee}
+.badge{padding:6px 10px;border-radius:8px;background:#f0ece5;color:#4a2c6d;font-weight:700}
+
+/* layout main */
+.main{
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:20px;
+}
+@media (max-width:980px){
+  .main{grid-template-columns:1fr}
+}
+
+/* left: collection + detail */
+.left{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* detail card */
+.card{
+  background:linear-gradient(145deg,#fff,#f7f7f7);
+  border-radius:12px;
+  padding:18px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.06);
+}
+.detail-title{
+  font-size:1.4rem;font-weight:700;color:#2c3e50;margin-bottom:8px;
+}
+.detail-props{color:var(--muted);white-space:pre-wrap;margin-bottom:12px}
+.img-wrap{
+  width:100%;
+  max-width:720px;
+  height: 320px;
+  border-radius:10px;
+  overflow:hidden;
+  background:#eee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* right: sidebar (admin + small gallery) */
+.sidebar{display:flex;flex-direction:column;gap:18px}
+
+/* thumbnails scroller */
+.thumb-scroller{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:8px 4px;
+}
+.thumb{
+  min-width:120px;height:120px;border-radius:10px;overflow:hidden;cursor:pointer;position:relative;border:1px solid #eee;
+}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .name{position:absolute;left:0;right:0;bottom:0;padding:8px;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);color:#fff;font-weight:700;text-align:center;font-size:0.95rem}
+
+/* admin panel */
+.admin-panel{display:flex;flex-direction:column;gap:10px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field input,.field textarea{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:1rem}
+.controls-row{display:flex;gap:8px;flex-wrap:wrap}
+.small{font-size:0.9rem;padding:6px 10px}
+
+/* modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:200}
+.modal{background:white;border-radius:12px;padding:18px;width:calc(100% - 40px);max-width:620px;box-shadow:0 10px 35px rgba(0,0,0,0.25)}
+.modal h3{margin-top:0}
+
+/* notification */
+.note{position:fixed;top:18px;right:18px;background:var(--accent2);color:white;padding:10px 14px;border-radius:10px;font-weight:700;z-index:300;display:none}
+
+/* helper */
+.hidden{display:none}
+.center{text-align:center}
+.small-muted{color:var(--muted);font-size:0.9rem}
+</style>
+</head>
+<body>
+<div class="note" id="note"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="title">
+      <h1>Zümrüt'ün Değerli Taş Koleksiyonu</h1>
+      <span>Nadir taşlar — ziyaretçiler görüntüleyebilir, admin düzenleyebilir</span>
+    </div>
+
+    <div class="controls">
+      <div id="statusBadge" class="badge">Misafir</div>
+      <button id="openLogin" class="btn btn-primary">Admin Giriş</button>
+      <button id="logoutBtn" class="btn hidden">Çıkış</button>
+      <button id="openAdd" class="btn btn-ghost hidden">Yeni Taş</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="left">
+      <div class="card" id="detailCard">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="detail-title" id="detailName">Taş Seçiniz</div>
+            <div class="small-muted" id="detailSub">Koleksiyondan bir taş seçin veya admin olarak giriş yapın.</div>
+          </div>
+          <div id="detailActionBtns" class="hidden">
+            <button id="editBtn" class="btn small">Düzenle</button>
+            <button id="deleteBtn" class="btn small" style="background:#e74c3c;color:white">Sil</button>
+          </div>
+        </div>
+
+        <div class="img-wrap" style="margin-top:14px">
+          <img id="detailImage" src="" alt="Taş resmi" />
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="detail-props" id="detailProps">Detaylar burada görünecek.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-weight:700">Koleksiyondaki Taşlar</div>
+          <div class="small-muted">Kaydırmak için yatay hareket</div>
+        </div>
+        <div class="thumb-scroller" id="thumbs"></div>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="card admin-panel" id="adminPanel">
+        <div class="center"><strong>Admin Panel</strong></div>
+        <div class="small-muted center" id="adminHint">Giriş yapmadınız — düzenleme için admin olmalısınız.</div>
+
+        <div class="field">
+          <label>Taş Adı</label>
+          <input id="fName" placeholder="Ör: Ametist" />
+        </div>
+
+        <div class="field">
+          <label>Özellikler (satır atla ile ayrılabilir)</label>
+          <textarea id="fProps" rows="4" placeholder="Taşın özellikleri..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Resim yolları (her satıra 1 yol). Örn: images/ametist1.jpg veya https://...jpg</label>
+          <textarea id="fImages" rows="3" placeholder="images/ametist1.jpg"></textarea>
+        </div>
+
+        <div class="controls-row">
+          <button id="saveBtn" class="btn btn-primary small">Kaydet</button>
+          <button id="cancelEdit" class="btn small">Sıfırla</button>
+          <button id="pushGithub" class="btn small hidden" title="Opsiyonel: remote gems.json yaz">GitHub'a kaydet (opsiyonel)</button>
+        </div>
+
+        <div class="small-muted" style="font-size:0.85rem">
+          <div>Local: veriler LocalStorage'ta saklanır. İstersen gems.json dosyasını remote'a pushlayabilirsin (PAT gerekir).</div>
+        </div>
+      </div>
+
+      <div class="card center small-muted">
+        <div style="font-weight:700;margin-bottom:8px">Hızlı Yardım</div>
+        <div style="text-align:left;font-size:0.95rem">
+          • Resimleri `images/` klasörüne yükle.<br/>
+          • Dosya adlarında büyük/küçük harf önemlidir.<br/>
+          • İlk admin şifresi kod içinde `ADMIN_PASSWORD` değişkeninde.<br/>
+          • GitHub API ile otomatik commit istersen aşağıya tıklayıp token ekleyebilirsin.
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="modal">
+    <h3>Admin Girişi</h3>
+    <div class="field">
+      <input id="loginPass" type="password" placeholder="Şifreyi gir" />
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end">
+      <button id="loginCancel" class="btn">İptal</button>
+      <button id="loginConfirm" class="btn btn-primary">Giriş</button>
+    </div>
+    <p id="loginError" class="small-muted" style="color:#e74c3c;display:none;margin-top:8px"></p>
+  </div>
+</div>
+
+<script>
+/* =========================
+   CONFIG / INITIAL DATA
+   ========================= */
+const ADMIN_PASSWORD = '230215Zz'; // değiştirmek istersen burayı güncelle
+const GITHUB_CONFIG = {
+  enabled: false,          // true yaparsan push fonksiyonu aktifleşir (ek güvenlik: token girmelisiniz)
+  owner: '',               // örn: 'kullanici'
+  repo: '',                // örn: 'repo-adi'
+  branch: 'main',          // veya 'gh-pages'
+  path: 'gems.json'        // repoya yazılacak dosya
+};
+// Örnek başlangıç taşları (görünüm için)
+const initialGems = [
+  { id: 1, name: "Ametist", properties: "Mor tonları, trigonal kristal yapısı.\nMohs: 7", images: ["images/ametist1.jpg","images/ametist2.jpg"] },
+  { id: 2, name: "Zümrüt", properties: "Yeşilin değerli tonu.\nMohs: 7.5-8", images: ["images/zumrut1.jpg"] },
+  { id: 3, name: "Safir", properties: "Mavi korindon.\nMohs: 9", images: ["images/safir1.jpg"] }
+];
+
+/* =========================
+   STATE
+   ========================= */
+let gems = [];
+let selectedId = null;
+let isAdmin = false;
+
+/* =========================
+   DOM REFERENCES
+   ========================= */
+const note = id('note');
+const statusBadge = id('statusBadge');
+const openLogin = id('openLogin');
+const logoutBtn = id('logoutBtn');
+const openAdd = id('openAdd');
+const detailName = id('detailName');
+const detailProps = id('detailProps');
+const detailImage = id('detailImage');
+const thumbs = id('thumbs');
+const detailActionBtns = id('detailActionBtns');
+const editBtn = id('editBtn');
+const deleteBtn = id('deleteBtn');
+
+const adminHint = id('adminHint');
+const fName = id('fName');
+const fProps = id('fProps');
+const fImages = id('fImages');
+const saveBtn = id('saveBtn');
+const cancelEdit = id('cancelEdit');
+const pushGithubBtn = id('pushGithub');
+
+const loginOverlay = id('loginOverlay');
+const loginPass = id('loginPass');
+const loginConfirm = id('loginConfirm');
+const loginCancel = id('loginCancel');
+const loginError = id('loginError');
+
+/* ============= Helpers ============= */
+function id(s){return document.getElementById(s)}
+function showNote(msg, timeout=2200){ note.style.display='block'; note.textContent=msg; clearTimeout(note._t); note._t=setTimeout(()=>note.style.display='none', timeout) }
+function saveLocal(){
+  localStorage.setItem('gems_v1', JSON.stringify(gems));
+}
+function loadLocal(){
+  try{
+    const raw = localStorage.getItem('gems_v1');
+    if(raw){
+      gems = JSON.parse(raw);
+      if(!Array.isArray(gems) || gems.length===0){ gems = [...initialGems]; saveLocal(); }
+    } else {
+      gems = [...initialGems];
+      saveLocal();
+    }
+  }catch(e){
+    console.error(e);
+    gems = [...initialGems];
+  }
+}
+
+/* =========================
+   Image validation that accepts:
+   - relative paths starting with 'images/' or '/'
+   - data: urls
+   - http/https absolute urls
+   ========================= */
+function parseImageLines(text){
+  if(!text) return [];
+  const lines = text.split(/\r?\n|,/).map(s=>s.trim()).filter(s=>s);
+  const filtered = lines.filter(line=>{
+    if(line.startsWith('data:')) return true;
+    if(/^https?:\/\//i.test(line)) return /\.(jpe?g|png|gif|svg|webp|bmp)$/i.test(line);
+    if(/^\/|^images\//i.test(line)) return true; // relative repo images path allowed
+    return false;
+  });
+  return filtered;
+}
+
+/* =========================
+   RENDER
+   ========================= */
+function renderThumbs(){
+  thumbs.innerHTML='';
+  gems.forEach(g=>{
+    const wrapper = document.createElement('div');
+    wrapper.className='thumb';
+    wrapper.dataset.id = g.id;
+    const img = document.createElement('img');
+    img.alt = g.name;
+    const src = (g.images && g.images.length>0) ? g.images[0] : '';
+    img.src = src || placeholderSVG();
+    img.onerror = ()=>{ img.src = placeholderSVG(); };
+    const name = document.createElement('div');
+    name.className='name';
+    name.innerText = g.name;
+    wrapper.appendChild(img);
+    wrapper.appendChild(name);
+    wrapper.addEventListener('click', ()=> selectGem(g.id));
+    thumbs.appendChild(wrapper);
+  });
+}
+
+function renderDetail(g){
+  if(!g){
+    detailName.innerText = 'Taş Seçiniz';
+    detailProps.innerText = 'Koleksiyondan bir taş seçin veya admin olarak giriş yapın.';
+    detailImage.src = placeholderSVG();
+    detailActionBtns.classList.add('hidden');
+    return;
+  }
+  detailName.innerText = g.name;
+  detailProps.innerText = g.properties || '';
+  // show first valid image; handle error
+  const imgUrl = (g.images && g.images.length>0) ? g.images[0] : '';
+  detailImage.src = imgUrl || placeholderSVG();
+  detailImage.onerror = ()=>{ detailImage.src = placeholderSVG(); };
+  // admin actions visibility
+  if(isAdmin) detailActionBtns.classList.remove('hidden'); else detailActionBtns.classList.add('hidden');
+}
+
+/* =========================
+   Selection / CRUD
+   ========================= */
+function selectGem(id){
+  selectedId = id;
+  const g = gems.find(x=>x.id===id);
+  renderThumbs();
+  renderDetail(g);
+  // scroll thumb into view
+  const el = document.querySelector('.thumb[data-id="'+id+'"]');
+  if(el) el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function resetForm(){
+  fName.value=''; fProps.value=''; fImages.value=''; editingId = null;
+}
+let editingId = null;
+
+openAdd.addEventListener('click', ()=>{
+  editingId = null;
+  fName.value=''; fProps.value=''; fImages.value='';
+  showNote('Yeni taş bilgilerini sağ taraftan girip Kaydet butonuna basın.');
+});
+
+saveBtn.addEventListener('click', ()=>{
+  if(!isAdmin){ showNote('Bu işlem için admin olmalısınız.'); return; }
+  const name = fName.value.trim();
+  const props = fProps.value.trim();
+  const images = parseImageLines(fImages.value);
+  if(!name){ showNote('Taş adı gerekli.'); return; }
+  if(images.length===0){ showNote('En az 1 resim yolu ekleyin (images/... veya https://...).'); return; }
+  if(editingId){
+    const idx = gems.findIndex(x=>x.id===editingId);
+    if(idx!==-1){
+      gems[idx].name = name;
+      gems[idx].properties = props;
+      gems[idx].images = images;
+      showNote('Taş güncellendi.');
+    }
+  } else {
+    const newId = Date.now();
+    gems.push({id:newId, name, properties:props, images});
+    showNote('Yeni taş eklendi.');
+    selectedId = newId;
+  }
+  saveLocal();
+  renderThumbs();
+  const g = gems.find(x=>x.id===selectedId);
+  renderDetail(g);
+  // reset admin inputs optionally
+  fName.value=''; fProps.value=''; fImages.value='';
+});
+
+cancelEdit.addEventListener('click', ()=>{
+  fName.value=''; fProps.value=''; fImages.value='';
+  editingId = null;
+  showNote('Form sıfırlandı.');
+});
+
+editBtn.addEventListener('click', ()=>{
+  if(!isAdmin){ showNote('Admin girişi gerekli'); return; }
+  if(!selectedId){ showNote('Önce bir taş seçin'); return; }
+  const g = gems.find(x=>x.id===selectedId);
+  if(!g) return;
+  editingId = g.id;
+  fName.value = g.name;
+  fProps.value = g.properties;
+  fImages.value = (g.images || []).join('\\n');
+  showNote('Düzenleme modunda: değiştirip Kaydet butonuna basın.');
+});
+
+deleteBtn.addEventListener('click', ()=>{
+  if(!isAdmin){ showNote('Admin girişi gerekli'); return; }
+  if(!selectedId){ showNote('Önce bir taş seçin'); return; }
+  if(!confirm('Seçili taşı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')) return;
+  const g = gems.find(x=>x.id===selectedId);
+  gems = gems.filter(x=>x.id!==selectedId);
+  saveLocal();
+  selectedId = null;
+  renderThumbs();
+  renderDetail(null);
+  showNote((g && g.name ? g.name : 'Taş') + ' silindi.');
+});
+
+/* =========================
+   AUTH (simple local admin)
+   ========================= */
+openLogin.addEventListener('click', ()=> loginOverlay.style.display='flex');
+loginCancel.addEventListener('click', ()=> { loginOverlay.style.display='none'; loginPass.value=''; loginError.style.display='none'; });
+loginConfirm.addEventListener('click', attemptLogin);
+
+logoutBtn.addEventListener('click', ()=>{
+  isAdmin = false;
+  updateAdminUI();
+  showNote('Admin çıkışı yapıldı.');
+});
+
+function attemptLogin(){
+  const p = loginPass.value;
+  if(p === ADMIN_PASSWORD){
+    isAdmin = true;
+    loginOverlay.style.display='none';
+    loginPass.value='';
+    loginError.style.display='none';
+    updateAdminUI();
+    showNote('Admin olarak giriş yapıldı.');
+  } else {
+    loginError.style.display='block';
+    loginError.textContent = 'Hatalı şifre!';
+  }
+}
+
+function updateAdminUI(){
+  if(isAdmin){
+    statusBadge.innerText = 'Admin';
+    openLogin.classList.add('hidden');
+    logoutBtn.classList.remove('hidden');
+    openAdd.classList.remove('hidden');
+    adminHint.innerText = 'Admin modu aktif — sağdaki form ile düzenleyin.';
+    pushGithubBtn.classList.remove('hidden');
+  } else {
+    statusBadge.innerText = 'Misafir';
+    openLogin.classList.remove('hidden');
+    logoutBtn.classList.add('hidden');
+    openAdd.classList.add('hidden');
+    adminHint.innerText = 'Giriş yapılmadı — düzenleme için admin olmalısınız.';
+    pushGithubBtn.classList.add('hidden');
+  }
+}
+
+/* =========================
+   Optional: GitHub API push (write gems.json into repo)
+   - Bu fonksiyon çalışması için:
+     - GITHUB_CONFIG.enabled = true
+     - GITHUB_CONFIG.owner, repo, branch, path doldurulmalı
+     - Kullanıcıdan bir Personal Access Token (repo scope) alınacak (güvenlik!)
+   - Güvenlik uyarısı: PAT'ı istemiyorsan bu kısmı kullanma. Token'ı tarayıcıda tutmak risklidir.
+   ========================= */
+async function githubGetSha(config){
+  // get current file SHA (required for updating)
+  const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}?ref=${config.branch}`;
+  const resp = await fetch(url, { headers: { 'Accept':'application/vnd.github+json' }});
+  if(resp.status===200){
+    const j = await resp.json();
+    return j.sha;
+  }
+  return null;
+}
+
+async function githubCommit(config, contentBase64, token, message = 'Update gems.json from site'){
+  const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}`;
+  const body = {
+    message: message,
+    content: contentBase64,
+    branch: config.branch
+  };
+  // if file exists we must include sha
+  const sha = await githubGetSha(config);
+  if(sha) body.sha = sha;
+  const resp = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'token ' + token,
+      'Accept': 'application/vnd.github+json'
+    },
+    body: JSON.stringify(body)
+  });
+  if(!resp.ok){
+    const j = await resp.json().catch(()=>({}));
+    throw new Error('GitHub commit failed: ' + (j.message || resp.status));
+  }
+  return await resp.json();
+}
+
+pushGithubBtn.addEventListener('click', async ()=>{
+  if(!isAdmin){ showNote('Admin olmalısınız'); return; }
+  if(!GITHUB_CONFIG.enabled){ showNote('GitHub push devre dışı (CONFIG).'); return; }
+  const token = prompt('GitHub Personal Access Token (repo scope) girin (Güvenli değil, dikkat):');
+  if(!token) return;
+  try{
+    const data = JSON.stringify(gems, null, 2);
+    const b64 = btoa(unescape(encodeURIComponent(data)));
+    showNote('GitHub\'a yükleniyor...');
+    const res = await githubCommit(GITHUB_CONFIG, b64, token, 'Update gems.json via web UI');
+    console.log(res);
+    showNote('GitHub\'a kaydedildi.');
+  }catch(e){
+    console.error(e);
+    alert('Kaydetme başarısız: ' + e.message);
+    showNote('GitHub kaydetme hatası.');
+  }
+});
+
+/* =========================
+   UTIL: small svg placeholder
+   ========================= */
+function placeholderSVG(){
+  // data URI small SVG
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#f0ece5"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="20" fill="#7f8c8d">Resim Bulunamadı</text></svg>`
+  );
+}
+
+/* =========================
+   INIT
+   ========================= */
+function init(){
+  loadLocal();
+  renderThumbs();
+  if(gems.length>0){
+    selectGem(gems[0].id);
+  } else {
+    renderDetail(null);
+  }
+  updateAdminUI();
+}
+
+init();
+
+</script>
+</body>
+</html>
