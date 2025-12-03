@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zümrüt'ün Değerli Taş Koleksiyonu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💎</text></svg>">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div>
+                        <h1>Zümrüt'ün Değerli Taş Koleksiyonu</h1>
+                        <p class="tagline">Zümrüt'ün nadir ve eşsiz değerli taşlar dünyasına hoş geldiniz</p>
+                    </div>
+                </div>
+                <div class="collection-info">
+                    <span class="badge badge-info">
+                        <i class="fas fa-gem"></i> <span id="gemCount">9</span> Taş
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- MAIN CONTENT -->
+    <main class="container">
+        <!-- TAŞ GALERİSİ (YUKARIYA ALINDI) -->
+        <div class="card gallery-container">
+            <div class="gallery-header">
+                <h3><i class="fas fa-images"></i> Koleksiyondaki Taşlar</h3>
+                <span class="text-muted"></span>
+            </div>
+            
+            <div class="gallery-wrapper">
+                <button class="scroll-btn scroll-btn-left" id="scrollLeft">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="gallery-scroll" id="thumbs">
+                    <!-- Thumbnails will be generated here -->
+                </div>
+                
+                <button class="scroll-btn scroll-btn-right" id="scrollRight">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- TAŞ DETAY (AŞAĞIYA ALINDI) -->
+        <div class="card gem-detail fade-in">
+            <div class="card-header">
+                <div>
+                    <h2 id="detailName">Taş Seçiniz</h2>
+                    <p class="text-muted" id="detailSub">Koleksiyondan bir taş seçin</p>
+                </div>
+            </div>
+            
+            <div class="gem-image-container">
+                <div id="detailImagePlaceholder" class="gem-image-placeholder">
+                    <i class="fas fa-gem"></i>
+                    <span>Bir taş seçin</span>
+                </div>
+                <img id="detailImage" class="gem-image hidden" src="" alt="Taş resmi">
+            </div>
+            
+            <div class="gem-properties" id="detailProps">
+                Detaylarını görmek için koleksiyondan bir taş seçin.
+            </div>
+        </div>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Zümrüt'ün Değerli Taş Koleksiyonu. Tüm hakları saklıdır.</p>
+            <p class="text-muted" style="font-size: 0.8rem;">Modern Tasarımlar by@AT</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
