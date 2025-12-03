@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Değerli Taş Koleksiyonu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ---------- DEĞİŞKENLER ---------- */
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #5B21B6;
+            --secondary: #0EA5E9;
+            --accent: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-card: #334155;
+            --bg-input: #475569;
+            
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-light: rgba(255, 255, 255, 0.05);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --transition: all 0.3s ease;
+        }
+        
+        /* ---------- GENEL STİLLER ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #1a1f3a 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* ---------- TYPOGRAPHY ---------- */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .text-muted {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        /* ---------- BUTONLAR ---------- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-input);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-icon {
+            padding: 10px;
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* ---------- KARTLAR ---------- */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: 0 8px 30px var(--shadow), 
+                        inset 0 1px 0 var(--shadow-light);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: 0 12px 40px var(--shadow), 
+                        inset 0 1px 0 var(--shadow-light);
+            transform: translateY(-4px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        /* ---------- HEADER ---------- */
+        .header {
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        
+        .badge-guest {
+            background: rgba(100, 116, 139, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        
+        .badge-admin {
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--primary);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        
+        /* ---------- TAŞ DETAY BÖLÜMÜ ---------- */
+        .gem-detail {
+            margin-bottom: 30px;
+        }
+        
+        .gem-image-container {
+            width: 100%;
+            height: 400px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gem-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+        
+        .gem-image-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+        
+        .gem-image-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .gem-properties {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .gem-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        /* ---------- TAŞ GALERİSİ ---------- */
+        .gallery-container {
+            position: relative;
+        }
+        
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .gallery-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .gallery-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--bg-secondary);
+            scroll-behavior: smooth;
+        }
+        
+        .gallery-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .gallery-scroll::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+        }
+        
+        .gallery-scroll::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+        
+        .scroll-btn:hover {
+            opacity: 1;
+            background: var(--primary);
+            color: white;
+        }
+        
+        .scroll-btn-left {
+            left: -20px;
+        }
+        
+        .scroll-btn-right {
+            right: -20px;
+        }
+        
+        @media (max-width: 768px) {
+            .scroll-btn {
+                display: none;
+            }
+        }
+        
+        .gem-thumb {
+            flex: 0 0 auto;
+            width: 160px;
+            height: 160px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .gem-thumb:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .gem-thumb.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+        }
+        
+        .gem-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gem-thumb-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 12px 8px 8px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        /* ---------- MODAL ---------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+        
+        /* ---------- FORM STYLES ---------- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        /* ---------- NOTIFICATION ---------- */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1100;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideInRight 0.3s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification-success {
+            background: var(--accent);
+            color: white;
+            border-left: 4px solid #059669;
+        }
+        
+        .notification-error {
+            background: var(--danger);
+            color: white;
+            border-left: 4px solid #DC2626;
+        }
+        
+        .notification-info {
+            background: var(--secondary);
+            color: white;
+            border-left: 4px solid #0284C7;
+        }
+        
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1100px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .gem-image-container {
+                height: 300px;
+            }
+            
+            .gem-thumb {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+            }
+            
+            .main-layout {
+                gap: 20px;
+            }
+            
+            .notification {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+            
+            .modal {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .gem-thumb {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .gem-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+            }
+        }
+        
+        /* ---------- UTILITY ---------- */
+        .hidden {
+            display: none !important;
+        }
+        
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .mb-30 {
+            margin-bottom: 30px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(124, 58, 237, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+        }
+        
+        /* ---------- FOOTER ---------- */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+        
+        /* ---------- ADMIN PAGE ---------- */
+        .admin-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .admin-header {
+            padding: 20px 0;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .admin-main {
+            flex: 1;
+            padding: 40px 0;
+        }
+        
+        .admin-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .back-to-main {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        /* ---------- GEMS LIST IN ADMIN ---------- */
+        .gems-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .gem-list-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .gem-list-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+        }
+        
+        .gem-list-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .gem-list-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .gem-list-item-info {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- NOTIFICATION -->
+    <div class="notification" id="notification"></div>
+    
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay" id="loginOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> Admin Girişi</h3>
+                <button class="modal-close" id="loginCancel">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Şifre</label>
+                <input type="password" id="loginPass" class="form-control" placeholder="Admin şifresini girin" autocomplete="off">
+            </div>
+            <div id="loginError" class="text-muted mb-20" style="color: #EF4444; display: none; font-size: 0.9rem;">
+                Hatalı şifre!
+            </div>
+            <div class="form-actions">
+                <button id="loginCancelBtn" class="btn btn-secondary" style="flex: 1;">İptal</button>
+                <button id="loginConfirm" class="btn btn-primary" style="flex: 1;">Giriş Yap</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MAIN PAGE CONTENT -->
+    <div id="mainPage">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div>
+                            <h1>Zümrüt'ün Değerli Taş Koleksiyonu</h1>
+                            <p class="text-muted">Değerli taşlar koleksiyonu</p>
+                        </div>
+                    </div>
+                    
+                    <div class="user-controls">
+                        <div id="statusBadge" class="badge badge-guest">Misafir</div>
+                        <button id="openLogin" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Admin Giriş
+                        </button>
+                        <button id="logoutBtn" class="btn btn-secondary hidden">
+                            <i class="fas fa-sign-out-alt"></i> Çıkış
+                        </button>
+                        <a href="#admin" id="adminPanelBtn" class="btn btn-success hidden">
+                            <i class="fas fa-cog"></i> Admin Paneli
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- MAIN CONTENT -->
+        <main class="container">
+            <div class="main-layout" style="display: block;">
+                <!-- TAŞ DETAY -->
+                <div class="card gem-detail fade-in">
+                    <div class="card-header">
+                        <div>
+                            <h2 id="detailName">Taş Seçiniz</h2>
+                            <p class="text-muted" id="detailSub"></p>
+                        </div>
+                        <div id="detailActionBtns" class="hidden">
+                            <button id="editBtn" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-edit"></i> Düzenle
+                            </button>
+                            <button id="deleteBtn" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Sil
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gem-image-container">
+                        <div id="detailImagePlaceholder" class="gem-image-placeholder">
+                            <i class="fas fa-gem"></i>
+                            <span>Bir taş seçin</span>
+                        </div>
+                        <img id="detailImage" class="gem-image hidden" src="" alt="Taş resmi">
+                    </div>
+                    
+                    <div class="gem-properties" id="detailProps">
+                        Detaylar burada görünecek.
+                    </div>
+                    
+                    <div id="detailActions" class="gem-actions hidden">
+                        <!-- Actions will be shown here -->
+                    </div>
+                </div>
+                
+                <!-- TAŞ GALERİSİ -->
+                <div class="card gallery-container">
+                    <div class="gallery-header">
+                        <h3><i class="fas fa-images"></i> Koleksiyondaki Taşlar</h3>
+                        <span class="text-muted"></span>
+                    </div>
+                    
+                    <div class="gallery-wrapper">
+                        <button class="scroll-btn scroll-btn-left" id="scrollLeft">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        
+                        <div class="gallery-scroll" id="thumbs">
+                            <!-- Thumbnails will be generated here -->
+                        </div>
+                        
+                        <button class="scroll-btn scroll-btn-right" id="scrollRight">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2025 Zümrüt'ün Değerli Taş Koleksiyonu. Tüm hakları saklıdır.</p>
+                <p class="text-muted" style="font-size: 0.8rem;">v1.0 | AT Modern Tasarım</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- ADMIN PAGE CONTENT -->
+    <div id="adminPage" class="admin-page hidden">
+        <!-- ADMIN HEADER -->
+        <header class="admin-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <h1>Admin Paneli</h1>
+                            <p class="text-muted">Değerli taş koleksiyonunu yönetin</p>
+                        </div>
+                    </div>
+                    
+                    <div class="user-controls">
+                        <a href="#main" id="backToMain" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Ana Sayfaya Dön
+                        </a>
+                        <button id="adminLogoutBtn" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i> Çıkış
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- ADMIN MAIN CONTENT -->
+        <main class="admin-main">
+            <div class="container">
+                <div class="admin-form-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-edit"></i> Taş Yönetimi</h3>
+                            <div class="text-muted">
+                                <span id="adminStatus">Admin modu aktif</span>
+                            </div>
+                        </div>
+                        
+                        <div class="admin-form">
+                            <div class="form-group">
+                                <label class="form-label">Taş Adı *</label>
+                                <input id="adminFName" class="form-control" placeholder="Ör: Ametist, Zümrüt, Safir...">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Özellikler (satır atla ile ayrılabilir)</label>
+                                <textarea id="adminFProps" class="form-control" rows="6" placeholder="Taşın özellikleri..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Resim Yolları (her satıra 1 yol) *</label>
+                                <textarea id="adminFImages" class="form-control" rows="4" placeholder="images/ametist1.jpg&#10;images/ametist2.jpg&#10;https://example.com/stone.jpg"></textarea>
+                                <small class="text-muted">Örn: images/ametist1.jpg veya https://...jpg</small>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button id="adminSaveBtn" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Kaydet
+                                </button>
+                                <button id="adminCancelEdit" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Sıfırla
+                                </button>
+                                <button id="adminAddNew" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Yeni Taş
+                                </button>
+                                <button id="adminPushGithub" class="btn btn-secondary" title="Opsiyonel: GitHub'a kaydet">
+                                    <i class="fab fa-github"></i> GitHub'a Kaydet
+                                </button>
+                            </div>
+                            
+                            <div class="mt-20">
+                                <h4><i class="fas fa-list"></i> Mevcut Taşlar</h4>
+                                <div id="adminGemsList" class="gems-list">
+                                    <!-- Taş listesi buraya gelecek -->
+                                </div>
+                            </div>
+                            
+                            <div class="back-to-main">
+                                <a href="#main" class="btn btn-secondary">
+                                    <i class="fas fa-eye"></i> Koleksiyonu Görüntüle
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-20">
+                        <h3><i class="fas fa-info-circle"></i> Yönetim Bilgileri</h3>
+                        <ul style="padding-left: 20px; margin-top: 15px;">
+                            <li>Resimleri <code>images/</code> klasörüne yükleyin.</li>
+                            <li>Dosya adlarında büyük/küçük harf önemlidir.</li>
+                            <li>Veriler tarayıcınızın LocalStorage'ında saklanır.</li>
+                            <li>GitHub'a kaydetmek için token gerekir.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- ADMIN FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2025 Zümrüt'ün Değerli Taş Koleksiyonu - Admin Paneli</p>
+                <p class="text-muted" style="font-size: 0.8rem;">Güvenli yönetim arayüzü</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    /* =========================
+       CONFIG / INITIAL DATA
+       ========================= */
+    const ADMIN_PASSWORD = '230215Zz';
+    const GITHUB_CONFIG = {
+        enabled: false,
+        owner: '',
+        repo: '',
+        branch: 'main',
+        path: 'gems.json'
+    };
+    
+    const initialGems = [
+        { 
+            id: 1, 
+            name: "Zümrüt", 
+            properties: "Özellikleri: Berilyum mineralinin yeşil bir türü olan Zümrüt, en değerli taşlardan biridir. Rengi, yapısındaki krom ve/veya vanadyum elementlerinden gelir. Nadiren kusursuz çıkar, içindeki doğal çatlaklar (jardin) orijinallik işareti kabul edilir.
+
+İnsanlar Üzerindeki Etkileri: Kalp çakrası ile ilişkilendirilir. Sadakati, sevgiyi ve uyumu artırdığına; zihinsel berraklık, hafıza güçlendirme ve duygusal denge sağladığına inanılır. Negatif enerjileri uzaklaştırarak iç huzur getirdiği düşünülür.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/Z%C3%BCmr%C3%BCt.jpg"
+            ] 
+        },
+        { 
+            id: 2, 
+            name: "Ametist", 
+            properties: "Özellikleri: Mor, leylak ve eflatun tonlarındaki kuvars türüdür. Rengi, demir elementinin yapıda bulunması ve doğal radyasyona maruz kalmasından kaynaklanır. Oldukça yaygın bulunmasına rağmen koyu mor ve berrak olanları değerlidir.
+
+İnsanlar Üzerindeki Etkileri: Alın ve taç çakraları ile ilişkilendirilir. Sakinleştirici, stressavar, meditasyona yardımcı bir taş olarak bilinir. Zihni dinginleştirdiği, sezgileri güçlendirdiği, kötü düşüncelerden ve bağımlılıklardan koruduğuna inanılır.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/Amatista_Laye_2.jpg"
+            ] 
+        },
+        { 
+            id: 3, 
+            name: "Safir", 
+            properties: "Özellikleri: Korindon mineralinin, kırmızı dışındaki (ki o yakut olur) tüm renklerdeki değerli taş çeşididir. En klasik rengi mavidir (kobalt veya titanyum ile), ancak pembe, sarı, yeşil, beyaz (renksiz) gibi birçok renkte bulunur. Sertliği elmastan sonra gelir.
+
+İnsanlar Üzerindeki Etkileri: Alın ve boğaz çakrası ile ilişkilendirilir. Odaklanmayı, disiplini, netliği ve iç huzuru artırdığına; gerçeği görmeye ve ilham vermeye yardımcı olduğuna inanılır. Mavi safirlerin sakinleştirici, koruyucu ve zihinsel berraklık getirdiği düşünülür.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/sapphire_2048x-1-1-1.png"
+            ] 
+        },
+        { 
+            id: 4, 
+            name: "Opal", 
+            properties: "Özellikleri: Su içeren amorf bir silika mineralidir. İç yapısındaki mikro küreciklerin ışığı kırmasıyla oluşan renk oyunu (opalesans) ile ünlüdür. Şeffaf, yarı şeffaf veya opak olabilir. Değerli Opal ve Ateş Opali en bilinen türleridir.
+
+İnsanlar Üzerindeki Etkileri: Tüm çakraları dengeleyebildiği söylenir. Yaratıcılık, ilham ve hayal gücünü tetiklediğine; duygusal ifadeyi kolaylaştırdığına inanılır. Kişinin içindeki renkleri (yeteklerini) ortaya çıkardığı düşünülür.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/opal-tasi-nedir.webp"
+            ] 
+        },
+        { 
+            id: 5, 
+            name: "Ametrin", 
+            properties: "Özellikleri: Doğal olarak bir arada bulunan Ametist ve Sitrin minerallerinin melezidir. Taşın içinde mor (ametist) ve sarı/altın rengi (sitrin) bölgeler yan yana veya geçişli olarak bulunur. Bu renkler, demir elementinin farklı oksidasyon durumlarından kaynaklanır.
+
+İnsanlar Üzerindeki Etkileri: Hem üst (ametist) hem de alt (sitrin) çakraları birleştirdiğine inanılır. Ametist'in spiritüel ve sakinleştirici etkisi ile Sitrin'in enerji veren ve bolluk çeken etkisini bir arada sunduğu düşünülür. Karar verme ve uyum sağlama süreçlerine yardımcı olduğu söylenir.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/Ametrin-Tasi-Ozellikleri-ve-Faydalari-960x640.jpg"
+            ] 
+        },
+         { 
+            id: 6, 
+            name: "Pembe Kuvars", 
+            properties: "Özellikleri: En yaygın ve bilinen pembe taşlardan biridir. Rengi, yapısındaki eser miktardaki titanyum, demir veya manganez elementinden gelir. Genellikle büyük, opak veya yarı şeffaf kütleler halinde bulunur. Şeffaf ve parlak kesimlik kristalleri nadirdir.
+
+İnsanlar Üzerindeki Etkileri: Kalp çakrasının ana taşıdır. Koşulsuz sevgi, şefkat, duygusal iyileşme ve öz-sevgi ile güçlü bir şekilde bağlantılıdır. Kalpteki kırgınlıkları ve travmaları iyileştirdiği, ilişkilerde uyum ve bağlılık getirdiğine inanılır.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/Pembe%20Kuvars.webp"
+            ] 
+        },
+         { 
+            id: 7, 
+            name: "Turkuaz", 
+            properties: "Özellikleri: Bakır ve alüminyumun hidratlı fosfatı olan opak bir mineraldir. Mavi ve yeşilimsi mavi renkleri bakırdan, yeşil tonları ise demirden kaynaklanır. Gözenekli yapısı nedeniyle zamanla renk değiştirebilir (solma veya yeşilleşme). Kültürel olarak çok önemli bir taştır.
+
+İnsanlar Üzerindeki Etkileri: Boğaz çakrası ile ilişkilendirilir. İletişimi, samimiyeti ve ifade özgürlüğünü güçlendirdiğine inanılır. Güçlü bir koruyucu ve şans taşı olduğu, olumsuz enerjileri emdiği ve sahibi için erken uyarı sinyali verdiği (renk değiştirerek) düşünülür.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/Pembe%20Kuvars.webp"
+            ] 
+        },
+         { 
+            id: 8, 
+            name: "Akik", 
+            properties: "Özellikleri: Yarı şeffaf ila opak, ince katmanlı (bantlı) yapıya sahip bir kalsedon (mikro-kristalli kuvars) türüdür. Doğada en yaygın bulunan taşlardan biridir ve renk paleti çok geniştir (kahverengi, beyaz, gri, mavi, kırmızı, yeşil, sarı). Bantları, yosunumsu desenleri veya göz şeklindeki halkaları ile ünlüdür. Boya emme özelliği sayesinde çeşitli renklere boyanabilir.
+
+İnsanlar Üzerindeki Etkileri: Kök çakra başta olmak üzere, rengine göre farklı çakralarla ilişkilendirilir. Güçlü bir topraklayıcı ve dengeleyici taş olduğuna inanılır. İç huzur, güven, istikrar ve cesaret verdiği; negatif enerjileri emdiği ve kişiyi koruduğu düşünülür. Ayrıca odaklanmayı, konsantrasyonu ve pratik düşünceyi desteklediği söylenir.", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/Akik.webp"
+            ] 
+        },
+         { 
+            id: 9, 
+            name: "Elmas", 
+            properties: "Özellikleri: Bilinen en sert doğal mineraldir. Saf karbondan oluşur ve mükemmel kristal yapısı ona eşsiz sertlik ve parlaklık (ışık kırılımı) kazandırır. Renksiz olabildiği gibi, eser elementlere bağlı olarak sarı, kahverengi, mavi, pembe vb. çeşitli renklerde de bulunabilir.
+
+İnsanlar Üzerindeki Etkileri: Taç çakrayı temsil eder. Saflığı, berraklığı, gücü, cesareti ve ebedi aşkı simgeler. Zihni berraklaştırdığına, kararlılık ve odaklanma getirdiğine, negatif enerjileri dağıttığına ve kişinin en yüksek potansiyeline ulaşmasına yardımcı olduğuna inanılır.
+
+", 
+            images: [
+                "https://github.com/AliTarhana/zumrudun-koleksiyonu/blob/5da14906127489bf78389cafdbab66c3bcdc666a/images/Elmas.webp"
+            ] 
+        }
+    ];
+    
+    /* =========================
+       STATE
+       ========================= */
+    let gems = [];
+    let selectedId = null;
+    let isAdmin = false;
+    let editingId = null;
+    let currentPage = 'main'; // 'main' or 'admin'
+    
+    /* =========================
+       DOM REFERENCES
+       ========================= */
+    // Notification
+    const note = document.getElementById('notification');
+    
+    // Pages
+    const mainPage = document.getElementById('mainPage');
+    const adminPage = document.getElementById('adminPage');
+    
+    // Main Page Elements
+    const statusBadge = document.getElementById('statusBadge');
+    const openLogin = document.getElementById('openLogin');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const adminPanelBtn = document.getElementById('adminPanelBtn');
+    const backToMain = document.getElementById('backToMain');
+    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+    
+    const detailName = document.getElementById('detailName');
+    const detailSub = document.getElementById('detailSub');
+    const detailProps = document.getElementById('detailProps');
+    const detailImage = document.getElementById('detailImage');
+    const detailImagePlaceholder = document.getElementById('detailImagePlaceholder');
+    const thumbs = document.getElementById('thumbs');
+    const detailActionBtns = document.getElementById('detailActionBtns');
+    const editBtn = document.getElementById('editBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const detailActions = document.getElementById('detailActions');
+    
+    // Scroll buttons
+    const scrollLeft = document.getElementById('scrollLeft');
+    const scrollRight = document.getElementById('scrollRight');
+    
+    // Admin Page Elements
+    const adminStatus = document.getElementById('adminStatus');
+    const adminFName = document.getElementById('adminFName');
+    const adminFProps = document.getElementById('adminFProps');
+    const adminFImages = document.getElementById('adminFImages');
+    const adminSaveBtn = document.getElementById('adminSaveBtn');
+    const adminCancelEdit = document.getElementById('adminCancelEdit');
+    const adminAddNew = document.getElementById('adminAddNew');
+    const adminPushGithub = document.getElementById('adminPushGithub');
+    const adminGemsList = document.getElementById('adminGemsList');
+    
+    // Login Modal Elements
+    const loginOverlay = document.getElementById('loginOverlay');
+    const loginPass = document.getElementById('loginPass');
+    const loginConfirm = document.getElementById('loginConfirm');
+    const loginCancelBtn = document.getElementById('loginCancelBtn');
+    const loginCancel = document.getElementById('loginCancel');
+    const loginError = document.getElementById('loginError');
+    
+    /* ============= Helper Functions ============= */
+    function showNotification(msg, type = 'info', timeout = 3000) {
+        note.textContent = msg;
+        note.className = `notification notification-${type}`;
+        note.style.display = 'flex';
+        
+        clearTimeout(note._timeout);
+        note._timeout = setTimeout(() => {
+            note.style.display = 'none';
+        }, timeout);
+    }
+    
+    function saveLocal() {
+        localStorage.setItem('gems_v2', JSON.stringify(gems));
+        showNotification('Veriler kaydedildi.', 'success');
+    }
+    
+    function loadLocal() {
+        try {
+            const raw = localStorage.getItem('gems_v2');
+            if (raw) {
+                gems = JSON.parse(raw);
+                if (!Array.isArray(gems) || gems.length === 0) {
+                    gems = [...initialGems];
+                    saveLocal();
+                }
+            } else {
+                gems = [...initialGems];
+                saveLocal();
+            }
+        } catch (e) {
+            console.error(e);
+            gems = [...initialGems];
+        }
+    }
+    
+    function parseImageLines(text) {
+        if (!text) return [];
+        const lines = text.split(/\r?\n|,/).map(s => s.trim()).filter(s => s);
+        const filtered = lines.filter(line => {
+            if (line.startsWith('data:')) return true;
+            if (/^https?:\/\//i.test(line)) return /\.(jpe?g|png|gif|svg|webp|bmp)$/i.test(line);
+            if (/^\/|^images\//i.test(line)) return true;
+            return false;
+        });
+        return filtered;
+    }
+    
+    function switchPage(page) {
+        if (page === 'main') {
+            mainPage.classList.remove('hidden');
+            adminPage.classList.add('hidden');
+            currentPage = 'main';
+            window.location.hash = 'main';
+            renderThumbs();
+            if (gems.length > 0 && selectedId) {
+                const g = gems.find(x => x.id === selectedId);
+                renderDetail(g);
+            }
+        } else if (page === 'admin') {
+            if (!isAdmin) {
+                showNotification('Admin paneline erişmek için giriş yapmalısınız.', 'error');
+                return;
+            }
+            mainPage.classList.add('hidden');
+            adminPage.classList.remove('hidden');
+            currentPage = 'admin';
+            window.location.hash = 'admin';
+            renderAdminGemsList();
+            resetAdminForm();
+        }
+    }
+    
+    /* =========================
+       RENDER FUNCTIONS
+       ========================= */
+    function renderThumbs() {
+        thumbs.innerHTML = '';
+        
+        if (gems.length === 0) {
+            const emptyMsg = document.createElement('div');
+            emptyMsg.className = 'text-center';
+            emptyMsg.innerHTML = `
+                <div style="padding: 40px 20px;">
+                    <i class="fas fa-gem" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 20px;"></i>
+                    <p>Henüz taş eklenmemiş.</p>
+                    ${isAdmin ? '<button id="addFirstGem" class="btn btn-primary mt-20"><i class="fas fa-plus"></i> İlk Taşı Ekle</button>' : ''}
+                </div>
+            `;
+            thumbs.appendChild(emptyMsg);
+            
+            const addFirstBtn = document.getElementById('addFirstGem');
+            if (addFirstBtn) {
+                addFirstBtn.addEventListener('click', () => {
+                    switchPage('admin');
+                    showNotification('Yeni taş eklemek için admin panelini kullanın.', 'info');
+                });
+            }
+            return;
+        }
+        
+        gems.forEach(g => {
+            const thumb = document.createElement('div');
+            thumb.className = `gem-thumb ${selectedId === g.id ? 'active' : ''}`;
+            thumb.dataset.id = g.id;
+            
+            const img = document.createElement('img');
+            img.alt = g.name;
+            const src = (g.images && g.images.length > 0) ? g.images[0] : '';
+            img.src = src || placeholderSVG();
+            img.onerror = () => { img.src = placeholderSVG(); };
+            
+            const name = document.createElement('div');
+            name.className = 'gem-thumb-name';
+            name.innerText = g.name;
+            
+            thumb.appendChild(img);
+            thumb.appendChild(name);
+            
+            thumb.addEventListener('click', () => selectGem(g.id));
+            thumbs.appendChild(thumb);
+        });
+    }
+    
+    function renderDetail(g) {
+        if (!g) {
+            detailName.innerText = 'Taş Seçiniz';
+            detailSub.innerText = 'Koleksiyondan bir taş seçin veya admin olarak giriş yapın.';
+            detailProps.innerText = 'Detaylar burada görünecek.';
+            detailImage.classList.add('hidden');
+            detailImagePlaceholder.classList.remove('hidden');
+            detailActionBtns.classList.add('hidden');
+            detailActions.classList.add('hidden');
+            return;
+        }
+        
+        detailName.innerText = g.name;
+        detailSub.innerText = 'Koleksiyondan bir taş seçin veya admin olarak giriş yapın.';
+        detailProps.innerText = g.properties || 'Bu taş için açıklama bulunmuyor.';
+        
+        // Show first valid image
+        const imgUrl = (g.images && g.images.length > 0) ? g.images[0] : '';
+        if (imgUrl) {
+            detailImage.src = imgUrl;
+            detailImage.onerror = () => {
+                detailImage.src = placeholderSVG();
+                detailImage.classList.remove('hidden');
+                detailImagePlaceholder.classList.add('hidden');
+            };
+            detailImage.classList.remove('hidden');
+            detailImagePlaceholder.classList.add('hidden');
+        } else {
+            detailImage.classList.add('hidden');
+            detailImagePlaceholder.classList.remove('hidden');
+        }
+        
+        // Admin actions visibility
+        if (isAdmin) {
+            detailActionBtns.classList.remove('hidden');
+            detailActions.classList.remove('hidden');
+        } else {
+            detailActionBtns.classList.add('hidden');
+            detailActions.classList.add('hidden');
+        }
+    }
+    
+    function renderAdminGemsList() {
+        adminGemsList.innerHTML = '';
+        
+        if (gems.length === 0) {
+            adminGemsList.innerHTML = '<p class="text-muted">Henüz taş eklenmemiş.</p>';
+            return;
+        }
+        
+        gems.forEach(g => {
+            const item = document.createElement('div');
+            item.className = 'gem-list-item';
+            item.dataset.id = g.id;
+            
+            const imagesCount = (g.images && g.images.length) || 0;
+            
+            item.innerHTML = `
+                <div class="gem-list-item-header">
+                    <div>
+                        <h4 style="margin: 0;">${g.name}</h4>
+                        <div class="gem-list-item-info">
+                            <span class="info-badge">
+                                <i class="fas fa-hashtag"></i> ${g.id}
+                            </span>
+                            <span class="info-badge">
+                                <i class="fas fa-image"></i> ${imagesCount} resim
+                            </span>
+                        </div>
+                    </div>
+                    <div class="gem-list-item-actions">
+                        <button class="btn btn-sm btn-secondary admin-edit-btn" data-id="${g.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger admin-delete-btn" data-id="${g.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 8px;">
+                    ${g.properties ? g.properties.substring(0, 100) + (g.properties.length > 100 ? '...' : '') : 'Açıklama yok'}
+                </div>
+            `;
+            
+            item.addEventListener('mouseenter', () => {
+                item.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.backgroundColor = '';
+            });
+            
+            item.addEventListener('click', (e) => {
+                if (!e.target.closest('button')) {
+                    selectGem(g.id);
+                    switchPage('main');
+                }
+            });
+            
+            adminGemsList.appendChild(item);
+        });
+        
+        // Add event listeners to admin buttons
+        document.querySelectorAll('.admin-edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.dataset.id);
+                editGemInAdmin(id);
+            });
+        });
+        
+        document.querySelectorAll('.admin-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.dataset.id);
+                deleteGem(id, true);
+            });
+        });
+    }
+    
+    /* =========================
+       SELECTION / CRUD
+       ========================= */
+    function selectGem(id) {
+        selectedId = id;
+        const g = gems.find(x => x.id === id);
+        renderThumbs();
+        renderDetail(g);
+    }
+    
+    function resetAdminForm() {
+        adminFName.value = '';
+        adminFProps.value = '';
+        adminFImages.value = '';
+        editingId = null;
+    }
+    
+    function editGemInAdmin(id) {
+        const g = gems.find(x => x.id === id);
+        if (!g) return;
+        
+        editingId = g.id;
+        adminFName.value = g.name;
+        adminFProps.value = g.properties;
+        adminFImages.value = (g.images || []).join('\n');
+        
+        showNotification(`"${g.name}" düzenleme modunda.`, 'info');
+        
+        // Scroll to form
+        adminFName.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        adminFName.focus();
+    }
+    
+    function deleteGem(id, fromAdmin = false) {
+        if (!isAdmin) {
+            showNotification('Bu işlem için admin olmalısınız.', 'error');
+            return;
+        }
+        
+        const g = gems.find(x => x.id === id);
+        if (!g) return;
+        
+        if (!confirm(`"${g.name}" adlı taşı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`)) {
+            return;
+        }
+        
+        gems = gems.filter(x => x.id !== id);
+        saveLocal();
+        
+        if (selectedId === id) {
+            selectedId = null;
+        }
+        
+        if (fromAdmin) {
+            renderAdminGemsList();
+        } else {
+            renderThumbs();
+            renderDetail(null);
+        }
+        
+        showNotification(`"${g.name}" silindi.`, 'success');
+    }
+    
+    function saveGem() {
+        if (!isAdmin) {
+            showNotification('Bu işlem için admin olmalısınız.', 'error');
+            return;
+        }
+        
+        const name = adminFName.value.trim();
+        const props = adminFProps.value.trim();
+        const images = parseImageLines(adminFImages.value);
+        
+        if (!name) {
+            showNotification('Taş adı gerekli.', 'error');
+            adminFName.focus();
+            return;
+        }
+        
+        if (images.length === 0) {
+            showNotification('En az 1 resim yolu ekleyin (images/... veya https://...).', 'error');
+            adminFImages.focus();
+            return;
+        }
+        
+        if (editingId) {
+            const idx = gems.findIndex(x => x.id === editingId);
+            if (idx !== -1) {
+                gems[idx].name = name;
+                gems[idx].properties = props;
+                gems[idx].images = images;
+                showNotification(`"${name}" güncellendi.`, 'success');
+            }
+        } else {
+            const newId = Date.now();
+            gems.push({ id: newId, name, properties: props, images });
+            showNotification(`"${name}" eklendi.`, 'success');
+            selectedId = newId;
+        }
+        
+        saveLocal();
+        renderAdminGemsList();
+        resetAdminForm();
+        
+        // If we're on main page, update the view
+        if (currentPage === 'main') {
+            renderThumbs();
+            const g = gems.find(x => x.id === selectedId);
+            renderDetail(g);
+        }
+    }
+    
+    /* =========================
+       EVENT LISTENERS
+       ========================= */
+    // Scroll buttons
+    scrollLeft.addEventListener('click', () => {
+        thumbs.scrollBy({ left: -200, behavior: 'smooth' });
+    });
+    
+    scrollRight.addEventListener('click', () => {
+        thumbs.scrollBy({ left: 200, behavior: 'smooth' });
+    });
+    
+    // Main page buttons
+    editBtn.addEventListener('click', () => {
+        if (!isAdmin) {
+            showNotification('Admin girişi gerekli', 'error');
+            return;
+        }
+        
+        if (!selectedId) {
+            showNotification('Önce bir taş seçin', 'error');
+            return;
+        }
+        
+        switchPage('admin');
+        editGemInAdmin(selectedId);
+    });
+    
+    deleteBtn.addEventListener('click', () => {
+        if (!selectedId) {
+            showNotification('Önce bir taş seçin', 'error');
+            return;
+        }
+        deleteGem(selectedId, false);
+    });
+    
+    // Admin page buttons
+    adminSaveBtn.addEventListener('click', saveGem);
+    
+    adminCancelEdit.addEventListener('click', () => {
+        resetAdminForm();
+        showNotification('Form sıfırlandı.', 'info');
+    });
+    
+    adminAddNew.addEventListener('click', () => {
+        resetAdminForm();
+        showNotification('Yeni taş eklemek için formu doldurun.', 'info');
+        adminFName.focus();
+    });
+    
+    adminPushGithub.addEventListener('click', async () => {
+        if (!isAdmin) {
+            showNotification('Admin olmalısınız', 'error');
+            return;
+        }
+        
+        if (!GITHUB_CONFIG.enabled) {
+            showNotification('GitHub push devre dışı (CONFIG).', 'error');
+            return;
+        }
+        
+        const token = prompt('GitHub Personal Access Token (repo scope) girin:');
+        if (!token) return;
+        
+        try {
+            showNotification('GitHub\'a yükleniyor...', 'info');
+            
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('GitHub\'a kaydedildi (simülasyon).', 'success');
+            }, 1500);
+            
+        } catch (e) {
+            console.error(e);
+            showNotification('GitHub kaydetme hatası: ' + e.message, 'error');
+        }
+    });
+    
+    // Page navigation
+    adminPanelBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchPage('admin');
+    });
+    
+    backToMain.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchPage('main');
+    });
+    
+    // Logout buttons
+    logoutBtn.addEventListener('click', handleLogout);
+    adminLogoutBtn.addEventListener('click', handleLogout);
+    
+    function handleLogout() {
+        isAdmin = false;
+        updateAdminUI();
+        showNotification('Admin çıkışı yapıldı.', 'info');
+        if (currentPage === 'admin') {
+            switchPage('main');
+        }
+    }
+    
+    /* =========================
+       AUTHENTICATION
+       ========================= */
+    openLogin.addEventListener('click', () => {
+        loginOverlay.style.display = 'flex';
+        loginPass.value = '';
+        loginError.style.display = 'none';
+        loginPass.focus();
+    });
+    
+    loginCancelBtn.addEventListener('click', closeLoginModal);
+    loginCancel.addEventListener('click', closeLoginModal);
+    
+    function closeLoginModal() {
+        loginOverlay.style.display = 'none';
+        loginPass.value = '';
+        loginError.style.display = 'none';
+    }
+    
+    loginConfirm.addEventListener('click', attemptLogin);
+    
+    loginPass.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            attemptLogin();
+        }
+    });
+    
+    function attemptLogin() {
+        const p = loginPass.value;
+        if (p === ADMIN_PASSWORD) {
+            isAdmin = true;
+            loginOverlay.style.display = 'none';
+            loginPass.value = '';
+            loginError.style.display = 'none';
+            updateAdminUI();
+            showNotification('Admin olarak giriş yapıldı.', 'success');
+        } else {
+            loginError.style.display = 'block';
+            loginError.textContent = 'Hatalı şifre!';
+            loginPass.classList.add('pulse');
+            setTimeout(() => loginPass.classList.remove('pulse'), 2000);
+            loginPass.focus();
+            loginPass.select();
+        }
+    }
+    
+    function updateAdminUI() {
+        if (isAdmin) {
+            statusBadge.innerText = 'Admin';
+            statusBadge.className = 'badge badge-admin';
+            openLogin.classList.add('hidden');
+            logoutBtn.classList.remove('hidden');
+            adminPanelBtn.classList.remove('hidden');
+            adminStatus.innerText = 'Admin modu aktif';
+        } else {
+            statusBadge.innerText = 'Misafir';
+            statusBadge.className = 'badge badge-guest';
+            openLogin.classList.remove('hidden');
+            logoutBtn.classList.add('hidden');
+            adminPanelBtn.classList.add('hidden');
+            adminStatus.innerText = 'Giriş yapılmadı';
+        }
+    }
+    
+    /* =========================
+       UTILITY FUNCTIONS
+       ========================= */
+    function placeholderSVG() {
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+                <defs>
+                    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1E293B"/>
+                        <stop offset="100%" stop-color="#0F172A"/>
+                    </linearGradient>
+                    <linearGradient id="gem" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#7C3AED"/>
+                        <stop offset="50%" stop-color="#8B5CF6"/>
+                        <stop offset="100%" stop-color="#A78BFA"/>
+                    </linearGradient>
+                </defs>
+                <rect width="600" height="400" fill="url(#bg)"/>
+                <path d="M300,150 L350,200 L300,250 L250,200 Z" fill="url(#gem)" opacity="0.7"/>
+                <text x="300" y="320" text-anchor="middle" font-family="Arial" font-size="20" fill="#94A3B8">Resim Yüklenemedi</text>
+            </svg>`
+        );
+    }
+    
+    /* =========================
+       INITIALIZATION
+       ========================= */
+    function init() {
+        loadLocal();
+        renderThumbs();
+        
+        if (gems.length > 0) {
+            selectGem(gems[0].id);
+        } else {
+            renderDetail(null);
+        }
+        
+        updateAdminUI();
+        
+        // Handle hash navigation
+        window.addEventListener('hashchange', handleHashChange);
+        handleHashChange();
+    }
+    
+    function handleHashChange() {
+        const hash = window.location.hash.substring(1);
+        if (hash === 'admin' && isAdmin) {
+            switchPage('admin');
+        } else {
+            switchPage('main');
+        }
+    }
+    
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
+
